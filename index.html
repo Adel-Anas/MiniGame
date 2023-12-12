@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <title>Rock, Paper, Scissors Game</title>
+</head>
+<body>
+  <!-- Main game container -->
+  <div class="game-body">
+    <!-- Initial welcome and start button section -->
+    <div id="exit-title">
+      <div class="game-title">
+        <h1>Welcome to the Rock, Paper, Scissors Game!</h1>
+      </div>
+      <button class="game-button" onclick={launchGame()}>Start !</button>
+    </div>
+
+    <!-- Game content container -->
+    <div id="game-body-container">
+      <div id="game-container">
+        <!-- Title for move selection -->
+        <div id="game-container-title">
+          <p>Choose a Move</p>
+        </div>
+        
+        <!-- Container for GIF display -->
+        <div id="gif-container">
+          <img id="winner-gif" src="Winner.gif" alt="Winner GIF">
+        </div>
+
+        <!-- Container for move options -->
+        <div id="moves-container-display">
+          <div class="game-container-moves" id="game-container-move-id">
+            <div class="moves-rock">
+              <img src="rockImageComputer.png" onclick="playGame('rock')" alt="">
+            </div>
+            <div class="moves">
+              <img src="handPaper.png" onclick="playGame('paper')" alt="">
+            </div>
+            <div class="moves">
+              <img src="scissorsHand2.png" onclick="playGame('scissors')" alt="">
+            </div>
+          </div>
+        </div>
+
+        <!-- Container for hand animations -->
+        <div id="hand-animation-body">
+           <div id="hand-animation-container">
+              <img src="rockImagePlayer.png" alt="" id="players-hand">
+              <img src="rockImageComputer.png" alt="" id="computers-hand">
+           </div> 
+        </div>
+
+        <!-- Result and score display -->
+        <div>
+          <p id="result"></p>
+          <p id="score"></p>
+        </div>
+
+        <!-- Play Again and Exit buttons -->
+        <div class="Game-buttons" id="again-exit-buttons">
+          <button class="game-button green" onclick={playAgain()}>Play Again</button>
+          <button class="game-button red" onclick={CloseGame()}>Exit !</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript section -->
+  <script>
+    // Global variables to store scores
+    let userScore = 0;
+    let computerScore = 0;
+
+  
+    // Function to start the game
+    function launchGame(){
+      // Show game container, hide unnecessary elements
+      document.getElementById('game-body-container').style.display = 'block';
+      document.getElementById('hand-animation-body').style.display= 'none';
+      document.querySelector('.game-button').innerText = 'Game Started!';
+      document.getElementById('again-exit-buttons').style.display = 'none';
+      document.getElementById('startButton').disabled = true;
+      document.getElementById('score').style.display = 'none';
+    }
+
+    // Function to close the game window
+    function CloseGame(){
+      window.close();
+    }
+
+    // Function to handle user move selection
+    function playGame(playerChoice) {
+      // Options for the computer move
+      let options = ["rock", "paper", "scissors"];
+      let computerChoice = options[Math.floor(Math.random() * 3)];
+      
+      // Check the result of the game
+      let result = checkWin(playerChoice, computerChoice);
+
+      // Hide move selection, show hand animations
+      document.getElementById('moves-container-display').style.display = 'none';
+      document.getElementById('hand-animation-body').style.display='block';
+      document.getElementById('game-container-title').style.display='none';
+
+      // Delay to show the result and update the display
+      setTimeout(() => {
+        displayResult(playerChoice, computerChoice, result);
+        updateScore();
+        document.getElementById('players-hand').src = `${playerChoice}ImagePlayer.png`;
+        document.getElementById('computers-hand').src = `${computerChoice}ImageComputer.png`;
+        document.getElementById('players-hand').style.animation = 'none';
+        document.getElementById('computers-hand').style.animation = 'none';
+        document.getElementById('again-exit-buttons').style.display='block';
+        document.getElementById('result').style.display='block';
+        document.getElementById('score').style.display = 'block';
+        // Display sad face animation for a loss
+        if (result === "You Lose!") {
+          displaySadFace();
+        }
+      }, 2000);
+    }
+
+    // Function to check the result of the game
+    function checkWin(player, computer) {
+      if (player == computer) {
+        return "It's a Tie!";
+      } else if ((player == "paper" && computer == "rock") ||
+                (player == "rock" && computer == "scissors") ||
+                (player == "scissors" && computer == "paper")) {
+        userScore++;
+        return "You Win!";
+      } else {
+        computerScore++;
+        return "You Lose!";
+      }
+    }
+
+      // Function to update the score display
+      function updateScore() {
+      document.getElementById('score').textContent = `You ${userScore} - ${computerScore} Computer`;
+    }
+
+
+    // Function to reset the game for another round
+    function playAgain(){
+      document.getElementById('result').style.display='none';
+      document.getElementById('moves-container-display').style.display = 'block';
+      document.getElementById('again-exit-buttons').style.display='none';
+      document.getElementById('score').style.display = 'none';
+      document.getElementById('hand-animation-body').style.display= 'none';
+      document.getElementById('players-hand').src = `rockImagePlayer.png`;
+      document.getElementById('computers-hand').src = 'rockImageComputer.png';   
+      document.getElementById('players-hand').style.animation = 'rotateUpDownV2 0.5s ease-in-out infinite';
+      document.getElementById('computers-hand').style.animation = 'rotateUpDown 0.5s ease-in-out infinite';
+      document.getElementById('gif-container').style.display='none';
+    }
+
+    // Function to display the result of the game with animations
+    function displayResult(player, computer, result) {
+      // Create elements for displaying result
+      let resultContainer = document.createElement("div");
+      let resultParagraph = document.createElement("p");
+      
+      let playerSpan = document.createElement("span");
+      playerSpan.innerHTML = player;
+      playerSpan.classList.add("player-choice"); 
+
+      let computerSpan = document.createElement("span");
+      computerSpan.textContent = computer;
+      computerSpan.classList.add("computer-choice");
+      // Display result message
+      resultParagraph.innerHTML = `You chose <span class="player-choice">${player}</span>, computer chose <span class="computer-choice">${computer}</span>. ${result}`;
+      resultContainer.appendChild(resultParagraph);
+      
+      let resultElement = document.getElementById("result");
+      resultElement.innerHTML = '';
+      resultElement.appendChild(resultContainer);
+
+      // Apply styles based on the result
+      if (result === "You Win!") {
+        resultParagraph.style.color = "green";
+        document.getElementById("gif-container").style.display = "block";
+      } else if (result === "You Lose!") {
+        resultParagraph.style.color = "red";
+        document.getElementById("gif-container").style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
