@@ -125,6 +125,15 @@
     }
     #game-body-container{
         display: none;
+        animation: show-Up  0.5s ease-in-out;
+        transition: 0.5s all ease-in-out;
+    }
+    @keyframes show-Up{
+      0%{
+        transform: scale(0);
+      }100%{
+        transform: scale(1);
+      }
     }
 
     #game-container{
@@ -157,6 +166,13 @@
         justify-content: space-around;
         margin-bottom: 50px;
         height: auto;
+    }
+    @keyframes showDown{
+      100%{
+        transform: scale(1);
+      }0%{
+        transform: scale(0);
+      }
     }
 
     .moves{
@@ -253,6 +269,7 @@
     font-family: 'gamesFont';
     margin-bottom: 30px;
     word-spacing: 10px;
+    animation: show-Up  0.5s ease-in-out;
   }
   
   #result.green {

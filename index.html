@@ -101,7 +101,9 @@
       let result = checkWin(playerChoice, computerChoice);
 
       // Hide move selection, show hand animations
+      document.getElementById('moves-container-display').style.animation = 'showDown 0.5s ease-in-out';
       document.getElementById('moves-container-display').style.display = 'none';
+
       document.getElementById('hand-animation-body').style.display='block';
       document.getElementById('game-container-title').style.display='none';
 
